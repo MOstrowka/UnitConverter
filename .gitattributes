@@ -1,0 +1,8 @@
+# Ensure text files have normalized (LF) line endings in the repository
+* text=auto
+
+# Explicitly specify line ending normalization for certain file types
+*.py text
+*.html text
+*.css text
+*.js text
