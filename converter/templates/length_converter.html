@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Length Converter</title>
+    <script>
+        function updateToUnits() {
+            const fromUnit = document.getElementById("from_unit").value;
+            const toUnits = document.getElementById("to_unit").options;
+            for (let i = 0; i < toUnits.length; i++) {
+                toUnits[i].style.display = toUnits[i].value === fromUnit ? 'none' : 'block';
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Unit Converter</h1>
+    <nav>
+        <a href="{% url 'length_converter' %}">Length</a> |
+        <a href="{% url 'weight_converter' %}">Weight</a> |
+        <a href="{% url 'temperature_converter' %}">Temperature</a>
+    </nav>
+    <h2>Length Converter</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label>Enter the length to convert:</label>
+        <input type="text" name="length">
+
+        <label>Unit to Convert from:</label>
+        <select name="from_unit" id="from_unit" onchange="updateToUnits()">
+            <option value="" disabled selected>Select unit</option>
+            {% for unit in units %}
+                <option value="{{ unit }}">{{ unit }}</option>
+            {% endfor %}
+        </select>
+
+        <label>Unit to Convert to:</label>
+        <select name="to_unit" id="to_unit">
+            <option value="" disabled selected>Select unit</option>
+            {% for unit in units %}
+                <option value="{{ unit }}">{{ unit }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Convert</button>
+    </form>
+
+    {% if result %}
+        <p>Result of your calculation: {{ result }}</p>
+    {% endif %}
+
+    {% if error_message %}
+        <p style="color: red;">{{ error_message }}</p>
+    {% endif %}
+</body>
+</html>
