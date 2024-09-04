@@ -1,10 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
-# Widok dla strony głównej
+# Home view
 def home(request):
-    return render(request, 'home.html')
+    return redirect('length_converter')
 
-# Widok dla konwertera długości
+# Length converter view
 def length_converter(request):
     result = None
     error_message = None
@@ -16,7 +16,11 @@ def length_converter(request):
             from_unit = request.POST.get('from_unit')
             to_unit = request.POST.get('to_unit')
 
-            # Przykład konwersji dla długości
+            # Check if the selected units are the same
+            if from_unit == to_unit:
+                raise ValueError("Selected units are the same. Please choose different units.")
+
+            # Example conversion for length
             conversion_factors = {
                 "millimeter": 1,
                 "centimeter": 10,
@@ -34,18 +38,20 @@ def length_converter(request):
             result = length * conversion_factors[from_unit] / conversion_factors[to_unit]
             result_text = f"{length} {from_unit} = {result:.2f} {to_unit}"
 
-        except ValueError:
-            error_message = "Invalid input! Please enter a valid number and select correct units."
+        except ValueError as e:
+            error_message = str(e)
 
         return render(request, 'length_converter.html', {
             'result': result_text if not error_message else None,
             'error_message': error_message,
-            'units': units
+            'units': units,
+            'selected_from_unit': from_unit,
+            'selected_to_unit': to_unit
         })
 
     return render(request, 'length_converter.html', {'units': units})
 
-# Widok dla konwertera wagi
+# Weight converter view
 def weight_converter(request):
     result = None
     error_message = None
@@ -57,7 +63,11 @@ def weight_converter(request):
             from_unit = request.POST.get('from_unit')
             to_unit = request.POST.get('to_unit')
 
-            # Przykład konwersji dla wagi
+            # Check if the selected units are the same
+            if from_unit == to_unit:
+                raise ValueError("Selected units are the same. Please choose different units.")
+
+            # Example conversion for weight
             conversion_factors = {
                 "milligram": 1,
                 "gram": 1000,
@@ -72,18 +82,20 @@ def weight_converter(request):
             result = weight * conversion_factors[from_unit] / conversion_factors[to_unit]
             result_text = f"{weight} {from_unit} = {result:.2f} {to_unit}"
 
-        except ValueError:
-            error_message = "Invalid input! Please enter a valid number and select correct units."
+        except ValueError as e:
+            error_message = str(e)
 
         return render(request, 'weight_converter.html', {
             'result': result_text if not error_message else None,
             'error_message': error_message,
-            'units': units
+            'units': units,
+            'selected_from_unit': from_unit,
+            'selected_to_unit': to_unit
         })
 
     return render(request, 'weight_converter.html', {'units': units})
 
-# Widok dla konwertera temperatury
+# Temperature converter view
 def temperature_converter(request):
     result = None
     error_message = None
@@ -95,7 +107,11 @@ def temperature_converter(request):
             from_unit = request.POST.get('from_unit')
             to_unit = request.POST.get('to_unit')
 
-            # Przykład konwersji dla temperatury
+            # Check if the selected units are the same
+            if from_unit == to_unit:
+                raise ValueError("Selected units are the same. Please choose different units.")
+
+            # Example conversion for temperature
             if from_unit == "Celsius" and to_unit == "Fahrenheit":
                 result = (temperature * 9/5) + 32
             elif from_unit == "Fahrenheit" and to_unit == "Celsius":
@@ -113,13 +129,15 @@ def temperature_converter(request):
 
             result_text = f"{temperature} {from_unit} = {result:.2f} {to_unit}"
 
-        except ValueError:
-            error_message = "Invalid input! Please enter a valid number and select correct units."
+        except ValueError as e:
+            error_message = str(e)
 
         return render(request, 'temperature_converter.html', {
             'result': result_text if not error_message else None,
             'error_message': error_message,
-            'units': units
+            'units': units,
+            'selected_from_unit': from_unit,
+            'selected_to_unit': to_unit
         })
 
     return render(request, 'temperature_converter.html', {'units': units})

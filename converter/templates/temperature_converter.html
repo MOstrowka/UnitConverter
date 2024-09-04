@@ -1,56 +1,52 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Temperature Converter</title>
-    <script>
-        function updateToUnits() {
-            const fromUnit = document.getElementById("from_unit").value;
-            const toUnits = document.getElementById("to_unit").options;
-            for (let i = 0; i < toUnits.length; i++) {
-                toUnits[i].style.display = toUnits[i].value === fromUnit ? 'none' : 'block';
-            }
-        }
-    </script>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <h1>Unit Converter</h1>
-    <nav>
-        <a href="{% url 'length_converter' %}">Length</a> |
-        <a href="{% url 'weight_converter' %}">Weight</a> |
-        <a href="{% url 'temperature_converter' %}">Temperature</a>
-    </nav>
-    <h2>Temperature Converter</h2>
-    <form method="post">
-        {% csrf_token %}
-        <label>Enter the temperature to convert:</label>
-        <input type="text" name="temperature">
+    <div class="container">
+        <h1>Unit Converter</h1>
+        <ul class="nav">
+            <li><a href="{% url 'length_converter' %}">Length</a></li>
+            <li><a href="{% url 'weight_converter' %}">Weight</a></li>
+            <li><a href="{% url 'temperature_converter' %}" class="active">Temperature</a></li>
+        </ul>
 
-        <label>Unit to Convert from:</label>
-        <select name="from_unit" id="from_unit" onchange="updateToUnits()">
-            <option value="" disabled selected>Select unit</option>
-            {% for unit in units %}
-                <option value="{{ unit }}">{{ unit }}</option>
-            {% endfor %}
-        </select>
+        <form method="post">
+            {% csrf_token %}
+            <h2>Enter the temperature to convert</h2>
+            <label for="temperature">Value:</label>
+            <input type="text" id="temperature" name="temperature" placeholder="Enter value" required>
+            <label for="from_unit">From unit:</label>
+            <select id="from_unit" name="from_unit">
+                <option value="" disabled selected>Select unit to convert from</option>
+                <option value="Celsius">°C</option>
+                <option value="Fahrenheit">°F</option>
+                <option value="Kelvin">K</option>
+            </select>
+            <label for="to_unit">To unit:</label>
+            <select id="to_unit" name="to_unit">
+                <option value="" disabled selected>Select unit to convert to</option>
+                <option value="Celsius">°C</option>
+                <option value="Fahrenheit">°F</option>
+                <option value="Kelvin">K</option>
+            </select>
+            <button type="submit">Convert</button>
+        </form>
 
-        <label>Unit to Convert to:</label>
-        <select name="to_unit" id="to_unit">
-            <option value="" disabled selected>Select unit</option>
-            {% for unit in units %}
-                <option value="{{ unit }}">{{ unit }}</option>
-            {% endfor %}
-        </select>
-
-        <button type="submit">Convert</button>
-    </form>
-
-    {% if result %}
-        <p>Result of your calculation: {{ result }}</p>
-    {% endif %}
-
-    {% if error_message %}
-        <p style="color: red;">{{ error_message }}</p>
-    {% endif %}
+        <div class="result">
+            {% if result %}
+                <h2>Result of your calculation</h2>
+                <p>{{ result }}</p>
+                <a href="{% url 'temperature_converter' %}" class="btn">Reset</a>
+            {% elif error_message %}
+                <p style="color: red;">{{ error_message }}</p>
+                <a href="{% url 'temperature_converter' %}" class="btn">Reset</a>
+            {% endif %}
+        </div>
+    </div>
 </body>
 </html>
