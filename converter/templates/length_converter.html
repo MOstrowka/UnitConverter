@@ -5,6 +5,26 @@
     <meta charset="UTF-8">
     <title>Length Converter</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script>
+        function updateUnits(selectedUnit, targetSelectId) {
+            const targetSelect = document.getElementById(targetSelectId);
+            const options = targetSelect.options;
+
+            for (let i = 0; i < options.length; i++) {
+                options[i].disabled = (options[i].value === selectedUnit);
+            }
+        }
+
+        function handleFromUnitChange() {
+            const fromUnit = document.getElementById('from_unit').value;
+            updateUnits(fromUnit, 'to_unit');
+        }
+
+        function handleToUnitChange() {
+            const toUnit = document.getElementById('to_unit').value;
+            updateUnits(toUnit, 'from_unit');
+        }
+    </script>
 </head>
 <body>
     <div class="container">
@@ -15,48 +35,53 @@
             <li><a href="{% url 'temperature_converter' %}">Temperature</a></li>
         </ul>
 
-        <form method="post">
-            {% csrf_token %}
-            <h2>Enter the length to convert</h2>
-            <label for="length">Value:</label>
-            <input type="text" id="length" name="length" placeholder="Enter value" required>
-            <label for="from_unit">From unit:</label>
-            <select id="from_unit" name="from_unit">
-                <option value="" disabled selected>Select unit to convert from</option>
-                <option value="millimeter">mm</option>
-                <option value="centimeter">cm</option>
-                <option value="meter">m</option>
-                <option value="kilometer">km</option>
-                <option value="inch">in</option>
-                <option value="foot">ft</option>
-                <option value="yard">yd</option>
-                <option value="mile">mi</option>
-            </select>
-            <label for="to_unit">To unit:</label>
-            <select id="to_unit" name="to_unit">
-                <option value="" disabled selected>Select unit to convert to</option>
-                <option value="millimeter">mm</option>
-                <option value="centimeter">cm</option>
-                <option value="meter">m</option>
-                <option value="kilometer">km</option>
-                <option value="inch">in</option>
-                <option value="foot">ft</option>
-                <option value="yard">yd</option>
-                <option value="mile">mi</option>
-            </select>
-            <button type="submit">Convert</button>
-        </form>
-
-        <div class="result">
-            {% if result %}
+        {% if result or error_message %}
+            <!-- Panel z wynikiem -->
+            <div id="result-panel">
                 <h2>Result of your calculation</h2>
-                <p>{{ result }}</p>
+                {% if result %}
+                    <p>{{ result }}</p>
+                {% elif error_message %}
+                    <p style="color: red;">{{ error_message }}</p>
+                {% endif %}
                 <a href="{% url 'length_converter' %}" class="btn">Reset</a>
-            {% elif error_message %}
-                <p style="color: red;">{{ error_message }}</p>
-                <a href="{% url 'length_converter' %}" class="btn">Reset</a>
-            {% endif %}
-        </div>
+            </div>
+        {% else %}
+            <!-- Panel do wprowadzania danych -->
+            <div id="input-panel">
+                <form method="post">
+                    {% csrf_token %}
+                    <h2>Enter the length to convert</h2>
+                    <label for="length">Value:</label>
+                    <input type="text" id="length" name="length" placeholder="Enter value" required>
+                    <label for="from_unit">From unit:</label>
+                    <select id="from_unit" name="from_unit" onchange="handleFromUnitChange()">
+                        <option value="" disabled selected>Select unit to convert from</option>
+                        <option value="millimeter">mm</option>
+                        <option value="centimeter">cm</option>
+                        <option value="meter">m</option>
+                        <option value="kilometer">km</option>
+                        <option value="inch">in</option>
+                        <option value="foot">ft</option>
+                        <option value="yard">yd</option>
+                        <option value="mile">mi</option>
+                    </select>
+                    <label for="to_unit">To unit:</label>
+                    <select id="to_unit" name="to_unit" onchange="handleToUnitChange()">
+                        <option value="" disabled selected>Select unit to convert to</option>
+                        <option value="millimeter">mm</option>
+                        <option value="centimeter">cm</option>
+                        <option value="meter">m</option>
+                        <option value="kilometer">km</option>
+                        <option value="inch">in</option>
+                        <option value="foot">ft</option>
+                        <option value="yard">yd</option>
+                        <option value="mile">mi</option>
+                    </select>
+                    <button type="submit">Convert</button>
+                </form>
+            </div>
+        {% endif %}
     </div>
 </body>
 </html>
