@@ -1,4 +1,3 @@
-/* Ustawienia podstawowe dla czcionki i tła */
 body {
     font-family: 'Comic Neue', 'Comic Sans MS', cursive;
     background-color: #f2f2f2;
@@ -11,7 +10,7 @@ body {
 }
 
 .container {
-    width: 300px; /* Stała szerokość aplikacji */
+    width: 300px;
     background-color: #fff;
     border-radius: 10px;
     border: 3px solid #333;
@@ -20,22 +19,24 @@ body {
     text-align: center;
 }
 
-h1 {
-    font-size: 1.8em; /* Nieco mniejsza czcionka dla tytułu */
-    color: #333;
+h1, h2 {
+    font-size: 1.5em;
+    font-family: 'Comic Neue', 'Comic Sans MS', cursive;
     margin-bottom: 20px;
+    color: #333;
 }
 
 .nav {
     list-style: none;
     padding: 0;
     margin-bottom: 20px;
-    font-size: 1em; /* Ujednolicony rozmiar zakładek */
+    font-size: 1em;
+    display: flex;
+    justify-content: space-around;
 }
 
 .nav li {
-    display: inline;
-    margin: 0 8px; /* Zmniejszone odstępy */
+    display: inline-block;
     position: relative;
 }
 
@@ -44,11 +45,13 @@ h1 {
     color: #333;
     font-weight: bold;
     position: relative;
+    padding: 5px 10px;
+    transition: all 0.3s ease;
 }
 
 .nav a.active {
     color: #007BFF;
-    text-decoration: none; /* Brak standardowego podkreślenia */
+    text-decoration: none;
 }
 
 .nav a.active::after {
@@ -60,21 +63,36 @@ h1 {
     position: absolute;
     bottom: -5px;
     left: 0;
-    transform: skew(-10deg); /* Kreskówkowy efekt */
     border-radius: 2px;
 }
 
+.nav a:hover {
+    background-color: #e0f7ff;
+    color: #007BFF;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+.nav a:active {
+    transform: scale(0.98);
+    background-color: #007BFF;
+    color: #fff;
+}
+
 input[type="text"], select, button {
-    width: 100%; /* Szerokość na 100%, aby wszystkie elementy były równe */
+    width: 100%;
     padding: 8px;
     margin: 8px 0;
     border: 2px solid #333;
     border-radius: 5px;
     font-size: 1em;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box; /* Upewnia się, że padding nie zmienia szerokości */
+    box-sizing: border-box;
 }
 
+input[type="text"], select {
+    margin-bottom: 15px;
+}
 
 label {
     display: block;
@@ -103,14 +121,19 @@ button {
     color: #fff;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    padding: 10px;
+    padding: 12px 20px;
     font-size: 1em;
-    margin-bottom: 10px;
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
 
 button:hover {
     background-color: #007BFF;
     color: #fff;
+}
+
+button:active {
+    transform: scale(0.98);
 }
 
 .result-panel {
@@ -123,15 +146,16 @@ button:hover {
     font-size: 1.2em;
 }
 
-.result-panel h2 {
-    margin-bottom: 10px;
-    font-size: 1.5em;
-    color: #333;
-}
-
 .result-panel p {
     font-size: 1.5em;
     color: #333;
+    text-align: center;
+}
+
+.result-panel button {
+    padding: 12px 20px;
+    font-size: 1.2em;
+    margin-top: 15px;
 }
 
 a.btn {
